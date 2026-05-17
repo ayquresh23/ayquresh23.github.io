@@ -75,18 +75,22 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 .hero-update-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
 
 /* CHANGELOG */
-.cl-toggle-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:5px;transition:border-color 0.15s,color 0.15s}
-.cl-toggle-btn:hover{border-color:var(--accent);color:var(--text)}
-.cl-toggle-arrow{display:inline-block;transition:transform 0.3s;font-size:10px}
-.changelog-outer{display:grid;grid-template-rows:1fr;transition:grid-template-rows 0.35s ease}
-.changelog-outer.collapsed{grid-template-rows:0fr}
-.changelog{min-height:0;overflow:hidden;margin-top:8px}
-.cl-group{display:grid;grid-template-columns:104px 1fr;gap:0 0;margin-bottom:0}
+.changelog{margin-top:8px}
+.cl-group{display:grid;grid-template-columns:104px 1fr;gap:0;margin-bottom:0}
 .cl-date-col{padding-top:14px;padding-right:20px;text-align:right;position:relative}
-.cl-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
 .cl-dot{position:absolute;right:-5px;top:18px;width:9px;height:9px;border-radius:50%;background:var(--surface-2);border:2px solid var(--border);z-index:1}
-.cl-items-col{padding:8px 0 20px 24px;border-left:1px solid var(--border)}
+.cl-items-col{padding:0 0 0 24px;border-left:1px solid var(--border)}
 .cl-group:last-child .cl-items-col{border-left-color:transparent}
+.cl-group-header{width:100%;background:none;border:none;display:flex;align-items:center;gap:10px;padding:11px 0;cursor:pointer;text-align:left}
+.cl-group-header:hover .cl-date{color:var(--text)}
+.cl-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;transition:color 0.15s}
+.cl-summary{font-size:12px;color:var(--dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cl-group:not(.collapsed) .cl-summary{display:none}
+.cl-chevron{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;flex-shrink:0;transition:transform 0.25s}
+.cl-group.collapsed .cl-chevron{transform:rotate(-90deg)}
+.cl-items-outer{display:grid;grid-template-rows:1fr;transition:grid-template-rows 0.3s ease}
+.cl-group.collapsed .cl-items-outer{grid-template-rows:0fr}
+.cl-items-inner{overflow:hidden;padding-bottom:10px}
 .cl-item{display:flex;align-items:baseline;gap:10px;padding:5px 0;line-height:1.45}
 .cl-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;letter-spacing:0.3px}
 .cl-badge.hub{background:rgba(124,106,247,0.15);color:var(--accent);border:1px solid rgba(124,106,247,0.3)}
@@ -249,96 +253,127 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 <div class="container" style="padding-top:0;padding-bottom:80px">
   <div class="section-head" id="whatsnew" style="margin-top:56px">
     <h2>What's new</h2>
-    <button class="cl-toggle-btn" onclick="toggleChangelog(this)">
-      <span class="cl-toggle-arrow">▾</span>
-      <span class="cl-toggle-label">hide</span>
-    </button>
+    <span>changelog — all updates since launch</span>
   </div>
 
-  <div class="changelog-outer" id="changelog-outer">
   <div class="changelog">
 
     <div class="cl-group">
       <div class="cl-date-col">
-        <div class="cl-date">16 May 2026</div>
         <div class="cl-dot" style="background:var(--accent);border-color:var(--accent)"></div>
       </div>
       <div class="cl-items-col">
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Glossary rewritten</strong> — all 109 entries simplified to 1–2 sentences; formulae now typeset in LaTeX (KaTeX). KaTeX rendering fixed for dynamically-built glossary.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>pKa added to glossary</strong> — dedicated entry in Topic 4 (Titrations), with acid strength, half-equivalence point, indicator range, and buffer range explained.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Glossary search prioritisation</strong> — exact title matches now appear at the top of results in a highlighted "Exact match" row, so searching e.g. "pH" shows the pH entry first.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Quick Lookup table</strong> — new at-a-glance reference at the top of Topic 2 (Statistics): CI with z, CI with t, Q-test, and t-test with formulas and decision rules.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>LaTeX formula rendering</strong> — all formula blocks now rendered with KaTeX for clean, properly typeset equations.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>LaTeX formula rendering</strong> — all formula blocks now rendered with KaTeX for clean, properly typeset equations.</span></div>
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">16 May 2026</span>
+          <span class="cl-summary">LaTeX rendering · glossary rewritten · search improvements</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Glossary rewritten</strong> — all 109 entries simplified to 1–2 sentences; formulae now typeset in LaTeX (KaTeX). KaTeX rendering fixed for dynamically-built glossary.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>pKa added to glossary</strong> — dedicated entry in Topic 4 (Titrations), with acid strength, half-equivalence point, indicator range, and buffer range explained.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Glossary search prioritisation</strong> — exact title matches now appear at the top of results in a highlighted "Exact match" row, so searching e.g. "pH" shows the pH entry first.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Quick Lookup table</strong> — new at-a-glance reference at the top of Topic 2 (Statistics): CI with z, CI with t, Q-test, and t-test with formulas and decision rules.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>LaTeX formula rendering</strong> — all formula blocks now rendered with KaTeX for clean, properly typeset equations.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>LaTeX formula rendering</strong> — all formula blocks now rendered with KaTeX for clean, properly typeset equations.</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="cl-group">
+    <div class="cl-group collapsed">
       <div class="cl-date-col">
-        <div class="cl-date">14 May 2026</div>
         <div class="cl-dot" style="background:var(--accent);border-color:var(--accent)"></div>
       </div>
       <div class="cl-items-col">
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Flashcards rebuilt</strong> — focused single-card study mode with topic filter, quantity selector (10/20/30/50/All), reshuffle, and progress bar. Keyboard: Space to flip, ← → to navigate, Esc to exit.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Navigation fixed</strong> — "← All Modules" hub link now always visible next to the logo; 📇 flashcard shortcut added to mode switcher.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Practice problems</strong> — 20 exam questions from the 2026 question bank, each with click-to-reveal step-by-step answers.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Revision examples</strong> — all 7 integrative worked examples from the revision lectures added as a dedicated section.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Progress tracking</strong> — visited topics shown with a ✓ badge and progress bar on the home page; state persists between sessions.</span></div>
-        <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Initial launch</strong> — 5 topics (Data &amp; Errors, Statistics, Gravimetric, Spectroscopy, Titrations), 130+ glossary terms, 25+ formulas, 17 MCQ traps, SVG diagrams.</span></div>
-        <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>EGA110 added</strong> as live module card.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Flashcards added</strong> — same focused single-card session as EGA110. 400+ term deck, topic filter, quantity selector.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Navigation fixed</strong> — "← All Modules" hub link always visible; removed from buried scrollable tabs.</span></div>
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">14 May 2026</span>
+          <span class="cl-summary">EGA110 launched · flashcards · practice problems · progress tracking</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Flashcards rebuilt</strong> — focused single-card study mode with topic filter, quantity selector (10/20/30/50/All), reshuffle, and progress bar. Keyboard: Space to flip, ← → to navigate, Esc to exit.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Navigation fixed</strong> — "← All Modules" hub link now always visible next to the logo; 📇 flashcard shortcut added to mode switcher.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Practice problems</strong> — 20 exam questions from the 2026 question bank, each with click-to-reveal step-by-step answers.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Revision examples</strong> — all 7 integrative worked examples from the revision lectures added as a dedicated section.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Progress tracking</strong> — visited topics shown with a ✓ badge and progress bar on the home page; state persists between sessions.</span></div>
+            <div class="cl-item"><span class="cl-badge ega110">EGA110</span><span class="cl-text"><strong>Initial launch</strong> — 5 topics (Data &amp; Errors, Statistics, Gravimetric, Spectroscopy, Titrations), 130+ glossary terms, 25+ formulas, 17 MCQ traps, SVG diagrams.</span></div>
+            <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>EGA110 added</strong> as live module card.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Flashcards added</strong> — same focused single-card session as EGA110. 400+ term deck, topic filter, quantity selector.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Navigation fixed</strong> — "← All Modules" hub link always visible; removed from buried scrollable tabs.</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="cl-group">
+    <div class="cl-group collapsed">
       <div class="cl-date-col">
-        <div class="cl-date">13 May 2026</div>
         <div class="cl-dot"></div>
       </div>
       <div class="cl-items-col">
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Major overhaul</strong> — fixed critical nav class bug (tabs were unstyled browser buttons), fixed duplicate &lt;body&gt; tag, fixed all three glossary search bugs.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Mode flash</strong> — colour-matched border animation on Learn/Revise switch (purple = Learn, amber = Revise) plus toast notification.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Arrow key navigation</strong> between topics; prev/next buttons auto-generated at the bottom of each section; per-topic colour accent strips.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Content fixes</strong> — term count corrected 300+ → 400+ (actual ~412), trap count corrected 25+ → 30+ (actual 33), "How to use" section hidden in Revise mode.</span></div>
-        <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>Hub improved</strong> — better hero copy; coming-soon cards fleshed out with real topic tags and counts; trap count corrected.</span></div>
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">13 May 2026</span>
+          <span class="cl-summary">EG182 overhaul · mode flash · arrow navigation · content fixes</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Major overhaul</strong> — fixed critical nav class bug (tabs were unstyled browser buttons), fixed duplicate &lt;body&gt; tag, fixed all three glossary search bugs.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Mode flash</strong> — colour-matched border animation on Learn/Revise switch (purple = Learn, amber = Revise) plus toast notification.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Arrow key navigation</strong> between topics; prev/next buttons auto-generated at the bottom of each section; per-topic colour accent strips.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Content fixes</strong> — term count corrected 300+ → 400+ (actual ~412), trap count corrected 25+ → 30+ (actual 33), "How to use" section hidden in Revise mode.</span></div>
+            <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>Hub improved</strong> — better hero copy; coming-soon cards fleshed out with real topic tags and counts; trap count corrected.</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="cl-group">
+    <div class="cl-group collapsed">
       <div class="cl-date-col">
-        <div class="cl-date">12 May 2026</div>
         <div class="cl-dot"></div>
       </div>
       <div class="cl-items-col">
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Diagrams overhauled</strong> — all 10 topic SVGs rebuilt with cleaner styling; process-flow diagrams standardised across all topics.</span></div>
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">12 May 2026</span>
+          <span class="cl-summary">EG182 SVG diagrams overhauled</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Diagrams overhauled</strong> — all 10 topic SVGs rebuilt with cleaner styling; process-flow diagrams standardised across all topics.</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="cl-group">
+    <div class="cl-group collapsed">
       <div class="cl-date-col">
-        <div class="cl-date">11 May 2026</div>
         <div class="cl-dot"></div>
       </div>
       <div class="cl-items-col">
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Diagrams added</strong> — comprehensive SVG diagrams for all 10 topics: sand casting cross-section, grain structure zones, TTT diagram, and more.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Hub navigation</strong> — "← All Modules" link added to definitions page and main nav.</span></div>
-        <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Initial launch</strong> — 10 topics (Manufacturing, Casting, Plastics, Rubber/PMC, PM, Forming, Machining, Cutting Tools, Grinding, HT/AM/SSM), 400+ glossary terms, 12 formulas, 33 MCQ traps, definitions page with SVG diagrams.</span></div>
-        <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>Hub launched</strong> — landing page for all module sites with EG182 live and 5 coming-soon cards.</span></div>
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">11 May 2026</span>
+          <span class="cl-summary">Initial launch · EG182 live · hub launched</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Diagrams added</strong> — comprehensive SVG diagrams for all 10 topics: sand casting cross-section, grain structure zones, TTT diagram, and more.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Hub navigation</strong> — "← All Modules" link added to definitions page and main nav.</span></div>
+            <div class="cl-item"><span class="cl-badge eg182">EG182</span><span class="cl-text"><strong>Initial launch</strong> — 10 topics (Manufacturing, Casting, Plastics, Rubber/PMC, PM, Forming, Machining, Cutting Tools, Grinding, HT/AM/SSM), 400+ glossary terms, 12 formulas, 33 MCQ traps, definitions page with SVG diagrams.</span></div>
+            <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>Hub launched</strong> — landing page for all module sites with EG182 live and 5 coming-soon cards.</span></div>
+          </div>
+        </div>
       </div>
     </div>
 
   </div>
-  </div><!-- /.changelog-outer -->
 </div>
 
 <script>
-function toggleChangelog(btn) {
-  const outer = document.getElementById('changelog-outer');
-  outer.classList.toggle('collapsed');
-  const collapsed = outer.classList.contains('collapsed');
-  btn.querySelector('.cl-toggle-arrow').style.transform = collapsed ? 'rotate(-90deg)' : '';
-  btn.querySelector('.cl-toggle-label').textContent = collapsed ? 'show' : 'hide';
+function toggleClGroup(btn) {
+  btn.closest('.cl-group').classList.toggle('collapsed');
 }
 </script>
 
