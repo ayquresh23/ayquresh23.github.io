@@ -341,6 +341,26 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
     <div class="cl-group">
       <div class="cl-date-col">
+        <div class="cl-dot" style="background:var(--accent);border-color:var(--accent)"></div>
+      </div>
+      <div class="cl-items-col">
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">12 Oct 2026</span>
+          <span class="cl-summary">Term previews and expandable glossary on every module</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge hub">All</span><span class="cl-text"><strong>Term previews</strong> — glossary terms in the notes now have a faint dotted underline; hover (or tap) for a Wikipedia-style card with the definition. Highlight or double-click any term, abbreviation or symbol (including ones in equations) to get the same card.</span></div>
+            <div class="cl-item"><span class="cl-badge hub">All</span><span class="cl-text"><strong>Comparisons</strong> — cards and glossary entries now show side-by-side tables for commonly confused pairs, e.g. isotropic vs anisotropic, edge vs screw dislocations, accuracy vs precision, ideal vs regular solution.</span></div>
+            <div class="cl-item"><span class="cl-badge hub">All</span><span class="cl-text"><strong>Expandable glossary</strong> — click any glossary entry or search result to see every place the term appears in the notes, and jump straight to it.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-group collapsed">
+      <div class="cl-date-col">
         <div class="cl-dot" style="background:#0ea5c6;border-color:#0ea5c6"></div>
       </div>
       <div class="cl-items-col">
