@@ -75,10 +75,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* CHANGELOG */
 .changelog{margin-top:8px}
-.cl-group{display:grid;grid-template-columns:104px 1fr;gap:0;margin-bottom:0}
+.cl-group{display:grid;grid-template-columns:104px minmax(0,1fr);gap:0;margin-bottom:0}
 .cl-date-col{padding-top:14px;padding-right:20px;text-align:right;position:relative}
 .cl-dot{position:absolute;right:-5px;top:18px;width:9px;height:9px;border-radius:50%;background:var(--surface-2);border:2px solid var(--border);z-index:1}
-.cl-items-col{padding:0 0 0 24px;border-left:1px solid var(--border)}
+.cl-items-col{min-width:0;padding:0 0 0 24px;border-left:1px solid var(--border)}
 .cl-group:last-child .cl-items-col{border-left-color:transparent}
 .cl-group-header{width:100%;background:none;border:none;display:flex;align-items:center;gap:10px;padding:11px 0;cursor:pointer;text-align:left}
 .cl-group-header:hover .cl-date{color:var(--text)}
@@ -103,6 +103,55 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .footer{text-align:center;padding:40px 20px;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
 .footer a{color:var(--accent);text-decoration:none}
 
+/* GLOBAL GLOSSARY SEARCH */
+.nav-right{display:flex;align-items:center;gap:16px;min-width:0}
+.gs-open{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px 7px 12px;color:var(--text-2);font:500 13px 'Inter',system-ui,sans-serif;cursor:pointer;transition:border-color .15s,color .15s;white-space:nowrap}
+.gs-open:hover{border-color:var(--accent);color:var(--text)}
+.gs-open svg{flex:none}
+.kbd{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:1px 6px;line-height:1.4}
+.gs-overlay{position:fixed;inset:0;z-index:2000;background:rgba(5,5,8,.72);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:72px 16px 16px}
+.gs-overlay.open{display:flex}
+.gs-panel{width:100%;max-width:760px;max-height:calc(100vh - 100px);display:flex;flex-direction:column;background:var(--bg-elev);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.6);overflow:hidden}
+.gs-top{padding:14px 14px 10px;border-bottom:1px solid var(--border-soft)}
+.gs-input-wrap{position:relative}
+.gs-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 70px 12px 16px;font:15px 'Inter',system-ui,sans-serif;color:var(--text);outline:none;transition:border-color .2s}
+.gs-input:focus{border-color:var(--accent)}
+.gs-input::placeholder{color:var(--muted)}
+.gs-esc{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer}
+.gs-filters{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.gs-chip{font:600 11px 'IBM Plex Mono',monospace;padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .15s}
+.gs-chip:hover{color:var(--text)}
+.gs-chip.active{background:var(--c,var(--accent));border-color:var(--c,var(--accent));color:#fff}
+.gs-meta{font:11px 'IBM Plex Mono',monospace;color:var(--muted);margin-top:9px;min-height:16px}
+.gs-results{overflow-y:auto;overscroll-behavior:contain;padding:6px 0}
+.gs-item{padding:11px 18px;border-left:2px solid transparent;cursor:pointer}
+.gs-item:hover{background:var(--surface)}
+.gs-item.sel{background:var(--accent-soft);border-left-color:var(--accent)}
+.gs-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+.gs-name{font:600 13px 'IBM Plex Mono',monospace;color:var(--text)}
+.gs-name mark,.gs-def mark{background:rgba(224,92,0,.28);color:inherit;border-radius:2px;padding:0 1px}
+.gs-badge{font:600 10px 'IBM Plex Mono',monospace;color:#fff;padding:1px 7px;border-radius:3px;background:var(--c)}
+.gs-unit{font:11px 'IBM Plex Mono',monospace;color:var(--muted)}
+.gs-def{font-size:13.5px;color:var(--text-2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gs-item.open .gs-def{display:block;color:var(--text);-webkit-line-clamp:unset}
+.gs-more{display:none;margin-top:10px}
+.gs-item.open .gs-more{display:block}
+.gs-cmp{overflow-x:auto;margin:6px 0 10px}
+.gs-cmp table{border-collapse:collapse;font-size:12.5px;width:100%}
+.gs-cmp th,.gs-cmp td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--border-soft);vertical-align:top;color:var(--text-2)}
+.gs-cmp th{color:var(--text);font-weight:600;border-bottom:1px solid var(--border)}
+.gs-cmp td:first-child{color:var(--muted);font:11px 'IBM Plex Mono',monospace;white-space:nowrap}
+.gs-link{font:600 12px 'IBM Plex Mono',monospace;color:var(--accent);text-decoration:none}
+.gs-link:hover{text-decoration:underline}
+.gs-empty{padding:28px 18px;text-align:center;color:var(--muted);font-size:14px}
+.gs-foot{display:flex;gap:14px;flex-wrap:wrap;padding:9px 16px;border-top:1px solid var(--border-soft);font:11px 'IBM Plex Mono',monospace;color:var(--muted)}
+body.gs-lock{overflow:hidden}
+@media(max-width:640px){
+  .cl-group{grid-template-columns:20px minmax(0,1fr)}.cl-date-col{padding-right:0}.cl-items-col{padding-left:16px}
+  .nav-meta{display:none}.gs-open .gs-label{display:none}.gs-open .kbd{display:none}
+  .gs-overlay{padding:12px 10px}.gs-panel{max-height:calc(100vh - 24px)}.gs-foot{display:none}.gs-item{padding:11px 14px}
+}
+
 @media(max-width:640px){
   .hero{padding:36px 16px 50px}.module-grid{grid-template-columns:1fr}.container{padding:90px 16px 60px}
 }
@@ -116,7 +165,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
       <div class="nav-logo">AQ</div>
       <span>Study Sites</span>
     </a>
-    <div class="nav-meta">Swansea University · Materials Science &amp; Engineering</div>
+    <div class="nav-right">
+      <div class="nav-meta">Swansea University · Materials Science &amp; Engineering</div>
+      <button type="button" class="gs-open" id="gs-open" aria-label="Search all glossaries" title="Search all glossaries (/)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5"/></svg>
+        <span class="gs-label">Search glossaries</span><span class="kbd">/</span>
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -340,6 +395,25 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   <div class="changelog">
 
     <div class="cl-group">
+      <div class="cl-date-col">
+        <div class="cl-dot" style="background:var(--accent);border-color:var(--accent)"></div>
+      </div>
+      <div class="cl-items-col">
+        <button class="cl-group-header" onclick="toggleClGroup(this)">
+          <span class="cl-date">10 Nov 2026</span>
+          <span class="cl-summary">Search every glossary from the home page</span>
+          <span class="cl-chevron">▾</span>
+        </button>
+        <div class="cl-items-outer">
+          <div class="cl-items-inner">
+            <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>Global glossary search</strong>: press <strong>/</strong> (or tap the search button) on the home page to search all six modules' glossaries at once. Filter by module, use the arrow keys and Enter to expand a term and see its comparison table, then jump to that module's glossary.</span></div>
+            <div class="cl-item"><span class="cl-badge hub">Hub</span><span class="cl-text"><strong>Mobile fix</strong>: the changelog no longer makes the home page scroll sideways on phones.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cl-group collapsed">
       <div class="cl-date-col">
         <div class="cl-dot" style="background:#00a87a;border-color:#00a87a"></div>
       </div>
@@ -595,6 +669,198 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 function toggleClGroup(btn) {
   btn.closest('.cl-group').classList.toggle('collapsed');
 }
+</script>
+
+<div class="gs-overlay" id="gs-overlay" role="dialog" aria-modal="true" aria-label="Search all module glossaries">
+  <div class="gs-panel">
+    <div class="gs-top">
+      <div class="gs-input-wrap">
+        <input type="text" class="gs-input" id="gs-input" placeholder="Search every term, definition and concept across all modules..." autocomplete="off" spellcheck="false" aria-controls="gs-results">
+        <span class="kbd gs-esc" id="gs-esc" title="Close">esc</span>
+      </div>
+      <div class="gs-filters" id="gs-filters"></div>
+      <div class="gs-meta" id="gs-meta" aria-live="polite"></div>
+    </div>
+    <div class="gs-results" id="gs-results" role="listbox"></div>
+    <div class="gs-foot"><span><span class="kbd">&uarr;</span> <span class="kbd">&darr;</span> move</span><span><span class="kbd">enter</span> expand</span><span><span class="kbd">esc</span> close</span><span><span class="kbd">/</span> search from anywhere on this page</span></div>
+  </div>
+</div>
+
+<script>
+/* Global glossary search: loads every live module's js/glossary-data.js (same origin)
+   and searches them together. Modules are discovered from the module cards, so new
+   modules are picked up automatically. */
+(function () {
+  var KATEX = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/';
+  var LIMIT = 80;
+  var ov = document.getElementById('gs-overlay'), inp = document.getElementById('gs-input');
+  var list = document.getElementById('gs-results'), meta = document.getElementById('gs-meta'), fbox = document.getElementById('gs-filters');
+  var MODS = [], TERMS = [], CMPS = [], loaded = null, filter = 'all', sel = -1, shown = [], timer = null;
+
+  // discover live modules from the cards on this page
+  document.querySelectorAll('a.module-card[href]').forEach(function (a) {
+    var m = a.getAttribute('href').match(/github\.io\/([a-z0-9-]+)\/?$/i);
+    var badge = a.querySelector('.module-badge');
+    if (!m || !badge) return;
+    MODS.push({ slug: m[1], code: badge.textContent.trim(), color: getComputedStyle(badge).backgroundColor, title: (a.querySelector('.module-title') || {}).textContent || '' });
+  });
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function plain(s) { return String(s).replace(/\\\(|\\\)/g, '').replace(/\\[a-zA-Z]+/g, ' ').replace(/[{}_^]/g, ''); }
+  function norm(s) { return plain(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
+  function loadKatex() {
+    if (window.katex || document.getElementById('gs-katex')) return;
+    var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = KATEX + 'katex.min.css'; document.head.appendChild(l);
+    var s = document.createElement('script'); s.id = 'gs-katex'; s.src = KATEX + 'katex.min.js'; s.defer = true;
+    s.onload = function () { render(); };
+    document.head.appendChild(s);
+  }
+
+  function load() {
+    if (loaded) return loaded;
+    meta.textContent = 'Loading glossaries...';
+    loaded = Promise.all(MODS.map(function (mod) {
+      return fetch('/' + mod.slug + '/js/glossary-data.js', { cache: 'no-cache' })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
+        .then(function (src) {
+          var g = new Function(src + '\n;return {d: typeof glossaryData !== "undefined" ? glossaryData : {}, c: typeof glossaryComparisons !== "undefined" ? glossaryComparisons : []};')();
+          Object.keys(g.d).forEach(function (uk) {
+            var u = g.d[uk];
+            (u.terms || []).forEach(function (t) {
+              TERMS.push({ mod: mod, unit: u.name || uk, name: t[0], def: t[1] || '', n: norm(t[0]), d: norm(t[1] || '') });
+            });
+          });
+          (g.c || []).forEach(function (c) {
+            var keys = [];
+            (c.terms || []).forEach(function (t, i) { keys.push(norm(t)); ((c.aliases || [])[i] || []).forEach(function (a) { keys.push(norm(a)); }); });
+            CMPS.push({ mod: mod, c: c, keys: keys });
+          });
+          mod.count = TERMS.filter(function (t) { return t.mod === mod; }).length;
+        })
+        .catch(function (e) { mod.failed = true; if (window.console) console.warn('glossary load failed:', mod.slug, e); });
+    })).then(function () { chips(); render(); });
+    return loaded;
+  }
+
+  function chips() {
+    var html = '<button type="button" class="gs-chip' + (filter === 'all' ? ' active' : '') + '" data-f="all">All &middot; ' + TERMS.length + '</button>';
+    MODS.forEach(function (m) {
+      if (m.failed || !m.count) return;
+      html += '<button type="button" class="gs-chip' + (filter === m.slug ? ' active' : '') + '" data-f="' + m.slug + '" style="--c:' + m.color + '">' + esc(m.code) + ' &middot; ' + m.count + '</button>';
+    });
+    fbox.innerHTML = html;
+  }
+  fbox.addEventListener('click', function (e) {
+    var b = e.target.closest('.gs-chip'); if (!b) return;
+    filter = b.getAttribute('data-f'); chips(); render(); inp.focus();
+  });
+
+  function score(t, toks, q) {
+    var s = 0;
+    for (var i = 0; i < toks.length; i++) {
+      var k = toks[i], inName = t.n.indexOf(k) !== -1, inDef = t.d.indexOf(k) !== -1;
+      if (!inName && !inDef) return 0;
+      s += inName ? 10 : 1;
+    }
+    if (t.n === q) s += 100; else if (t.n.indexOf(q) === 0) s += 40; else if (t.n.indexOf(q) !== -1) s += 20;
+    else if (t.d.indexOf(q) !== -1) s += 5;
+    return s - t.n.length / 100;
+  }
+
+  function hl(html, toks) {
+    // highlight tokens in text nodes only (skip inside tags/KaTeX markup)
+    if (!toks.length) return html;
+    var re = new RegExp('(' + toks.map(function (k) { return k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|') + ')', 'gi');
+    return html.split(/(<[^>]+>)/).map(function (part) { return part.charAt(0) === '<' ? part : part.replace(re, '<mark>$1</mark>'); }).join('');
+  }
+  function rich(s, toks) {
+    return String(s).split(/(\\\(.+?\\\))/g).map(function (part, i) {
+      if (i % 2) {
+        var f = part.slice(2, -2);
+        if (window.katex) { try { return katex.renderToString(f, { throwOnError: false }); } catch (e) {} }
+        return esc(plain(part));
+      }
+      return hl(esc(part), toks);
+    }).join('');
+  }
+
+  function cmpHtml(t) {
+    var out = '';
+    CMPS.forEach(function (x) {
+      if (x.mod !== t.mod || x.keys.indexOf(t.n) === -1) return;
+      var c = x.c;
+      out += '<div class="gs-cmp"><table><thead><tr><th></th>' + c.terms.map(function (h) { return '<th>' + rich(h, []) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        (c.rows || []).map(function (r) { return '<tr>' + r.map(function (cell) { return '<td>' + rich(cell, []) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+    });
+    return out;
+  }
+
+  function render() {
+    if (!TERMS.length) return;
+    var q = norm(inp.value.trim()), toks = q.split(/\s+/).filter(Boolean);
+    var pool = filter === 'all' ? TERMS : TERMS.filter(function (t) { return t.mod.slug === filter; });
+    var res;
+    if (!toks.length) res = pool.slice().sort(function (a, b) { return a.n < b.n ? -1 : a.n > b.n ? 1 : 0; });
+    else res = pool.map(function (t) { return { t: t, s: score(t, toks, q) }; }).filter(function (x) { return x.s > 0; })
+      .sort(function (a, b) { return b.s - a.s; }).map(function (x) { return x.t; });
+    shown = res.slice(0, LIMIT);
+    var failed = MODS.filter(function (m) { return m.failed; }).map(function (m) { return m.code; });
+    meta.textContent = (toks.length ? res.length + ' match' + (res.length === 1 ? '' : 'es') : res.length + ' terms, A to Z') +
+      (res.length > LIMIT ? ' (showing top ' + LIMIT + ', type more to narrow)' : '') + (failed.length ? '  |  could not load ' + failed.join(', ') : '');
+    if (!shown.length) { list.innerHTML = '<div class="gs-empty">No terms match &ldquo;' + esc(inp.value.trim()) + '&rdquo;' + (filter !== 'all' ? ' in this module. Try <strong>All</strong>.' : '.') + '</div>'; sel = -1; return; }
+    list.innerHTML = shown.map(function (t, i) {
+      return '<div class="gs-item" role="option" data-i="' + i + '" style="--c:' + t.mod.color + '">' +
+        '<div class="gs-head"><span class="gs-name">' + hl(esc(t.name), toks) + '</span><span class="gs-badge">' + esc(t.mod.code) + '</span><span class="gs-unit">' + esc(t.unit) + '</span></div>' +
+        '<div class="gs-def">' + rich(t.def, toks) + '</div><div class="gs-more"></div></div>';
+    }).join('');
+    sel = toks.length ? 0 : -1;
+    mark();
+  }
+
+  function mark(scroll) {
+    list.querySelectorAll('.gs-item').forEach(function (el, i) { el.classList.toggle('sel', i === sel); el.setAttribute('aria-selected', i === sel); });
+    if (scroll && sel >= 0) list.children[sel].scrollIntoView({ block: 'nearest' });
+  }
+  function toggle(el) {
+    var t = shown[+el.getAttribute('data-i')], more = el.querySelector('.gs-more');
+    if (!el.classList.contains('open') && !more.innerHTML)
+      more.innerHTML = cmpHtml(t) + '<a class="gs-link" href="/' + t.mod.slug + '/#glossary">Open ' + esc(t.mod.code) + ' glossary &rarr;</a>';
+    el.classList.toggle('open');
+  }
+  list.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;
+    var el = e.target.closest('.gs-item'); if (!el) return;
+    sel = +el.getAttribute('data-i'); mark(); toggle(el);
+  });
+
+  function open() {
+    if (ov.classList.contains('open')) { inp.focus(); inp.select(); return; }
+    ov.classList.add('open'); document.body.classList.add('gs-lock');
+    loadKatex(); load();
+    setTimeout(function () { inp.focus(); inp.select(); }, 20);
+  }
+  function close() { ov.classList.remove('open'); document.body.classList.remove('gs-lock'); }
+
+  document.getElementById('gs-open').addEventListener('click', open);
+  document.getElementById('gs-esc').addEventListener('click', close);
+  ov.addEventListener('mousedown', function (e) { if (e.target === ov) close(); });
+  inp.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 60); });
+
+  document.addEventListener('keydown', function (e) {
+    var isOpen = ov.classList.contains('open');
+    if (!isOpen) {
+      var a = document.activeElement, typing = a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+      if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); open(); }
+      return;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    var items = list.querySelectorAll('.gs-item');
+    if (e.key === 'ArrowDown' && items.length) { e.preventDefault(); sel = Math.min(sel + 1, items.length - 1); mark(true); }
+    else if (e.key === 'ArrowUp' && items.length) { e.preventDefault(); sel = Math.max(sel - 1, 0); mark(true); }
+    else if (e.key === 'Enter' && sel >= 0 && items[sel]) { e.preventDefault(); toggle(items[sel]); items[sel].scrollIntoView({ block: 'nearest' }); }
+  });
+})();
 </script>
 
 <footer class="footer">
